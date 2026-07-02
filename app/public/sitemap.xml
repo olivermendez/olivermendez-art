@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://olivermendez.art/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://olivermendez.art/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://olivermendez.art/en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://olivermendez.art/" />
+    <lastmod>2026-07-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://olivermendez.art/en</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://olivermendez.art/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://olivermendez.art/en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://olivermendez.art/" />
+    <lastmod>2026-07-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://olivermendez.art/project/esim-travel-app</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://olivermendez.art/project/esim-travel-app" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://olivermendez.art/en/project/esim-travel-app" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://olivermendez.art/project/esim-travel-app" />
+    <lastmod>2026-07-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://olivermendez.art/en/project/esim-travel-app</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://olivermendez.art/project/esim-travel-app" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://olivermendez.art/en/project/esim-travel-app" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://olivermendez.art/project/esim-travel-app" />
+    <lastmod>2026-07-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://olivermendez.art/project/medwork-global</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://olivermendez.art/project/medwork-global" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://olivermendez.art/en/project/medwork-global" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://olivermendez.art/project/medwork-global" />
+    <lastmod>2026-07-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://olivermendez.art/en/project/medwork-global</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://olivermendez.art/project/medwork-global" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://olivermendez.art/en/project/medwork-global" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://olivermendez.art/project/medwork-global" />
+    <lastmod>2026-07-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://olivermendez.art/project/caceres-torres</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://olivermendez.art/project/caceres-torres" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://olivermendez.art/en/project/caceres-torres" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://olivermendez.art/project/caceres-torres" />
+    <lastmod>2026-07-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://olivermendez.art/en/project/caceres-torres</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://olivermendez.art/project/caceres-torres" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://olivermendez.art/en/project/caceres-torres" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://olivermendez.art/project/caceres-torres" />
+    <lastmod>2026-07-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://olivermendez.art/project/cacebal</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://olivermendez.art/project/cacebal" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://olivermendez.art/en/project/cacebal" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://olivermendez.art/project/cacebal" />
+    <lastmod>2026-07-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://olivermendez.art/en/project/cacebal</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://olivermendez.art/project/cacebal" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://olivermendez.art/en/project/cacebal" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://olivermendez.art/project/cacebal" />
+    <lastmod>2026-07-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+</urlset>
