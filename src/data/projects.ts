@@ -36,7 +36,14 @@ export const projects: Record<CaseId, Project> = {
     card: shot('autolisto-ficha', 1400, 840),
     hero: shot('autolisto-home', 1600, 1100),
     phone: phone('autolisto-ios-buscar', 1304),
-    built: [shot('autolisto-busqueda-ia', 2200, 1375), shot('autolisto-ficha', 1400, 840), null, phone('autolisto-ios-garage', 1304)],
+    built: [
+      shot('autolisto-busqueda-ia', 2200, 1375),
+      shot('autolisto-ficha', 1400, 840),
+      shot('autolisto-dealer-inventario'),
+      phone('autolisto-ios-garage', 1304),
+      shot('autolisto-dealer-leads'),
+      shot('autolisto-dealer-detalle'),
+    ],
     next: 'mesapos',
   },
   mesapos: {

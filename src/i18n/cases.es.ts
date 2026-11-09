@@ -52,8 +52,10 @@ export const casesEs: Record<CaseId, CaseText> = {
     built: [
       { url: 'autolisto — búsqueda en lenguaje natural con ia', title: 'Búsqueda en lenguaje natural con IA', desc: 'Escribes lo que buscas como se lo dirías a una persona; la IA lo convierte en filtros.' },
       { url: 'autolisto — ficha del vehículo', title: 'Ficha del vehículo', desc: 'Toda la información del carro en una sola página.' },
-      { url: 'autolisto — panel del dealer', title: 'Panel del dealer', desc: 'Donde el dealer publica y administra su inventario.', pending: 'Captura: panel del dealer' },
+      { url: 'autolisto — panel del dealer', title: 'Panel del dealer', desc: 'Inventario con búsqueda, filtros por estado y métricas de cada vehículo. Captura local con datos de demostración.' },
       { url: null, title: 'App iOS nativa', desc: 'Hecha en SwiftUI.' },
+      { url: 'autolisto — gestión de leads', title: 'Seguimiento de compradores', desc: 'Consultas por vehículo, estados de seguimiento y notas internas. Captura local con clientes ficticios.' },
+      { url: 'autolisto — rendimiento del anuncio', title: 'Rendimiento del anuncio', desc: 'Vistas diarias, contactos, favoritos e historial de precio en una sola pantalla. Las métricas mostradas son de demostración.' },
     ],
     decisions: [
       {

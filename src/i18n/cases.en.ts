@@ -22,8 +22,10 @@ export const casesEn: Record<CaseId, CaseText> = {
     built: [
       { url: 'autolisto — natural-language ai search', title: 'Natural-language AI search', desc: 'You type what you want the way you’d say it to a person; the AI turns it into filters.' },
       { url: 'autolisto — vehicle page', title: 'Vehicle page', desc: 'Everything about the car on a single page.' },
-      { url: 'autolisto — dealer dashboard', title: 'Dealer dashboard', desc: 'Where dealers list and manage their inventory.', pending: 'Screenshot: dealer dashboard' },
+      { url: 'autolisto — dealer dashboard', title: 'Dealer dashboard', desc: 'Inventory search, status filters and per-vehicle metrics. Captured locally with demo data.' },
       { url: null, title: 'Native iOS app', desc: 'Built with SwiftUI.' },
+      { url: 'autolisto — lead management', title: 'Buyer follow-up', desc: 'Vehicle inquiries, follow-up statuses and internal notes. Captured locally with fictional customers.' },
+      { url: 'autolisto — listing performance', title: 'Listing performance', desc: 'Daily views, contacts, favorites and price history on one screen. All displayed metrics are demo data.' },
     ],
     decisions: [
       {
