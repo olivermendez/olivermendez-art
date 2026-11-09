@@ -1,0 +1,161 @@
+---
+import { t, type Lang } from '../i18n';
+import Icon from './Icon.astro';
+
+interface Props { lang: Lang }
+const L = t(Astro.props.lang).caseLabels;
+---
+
+<dialog class="capture-viewer" aria-label={L.captureViewer} data-capture-viewer>
+  <div class="capture-viewer__toolbar">
+    <p class="capture-viewer__title" data-capture-title></p>
+    <div class="capture-viewer__actions">
+      <button class="capture-viewer__zoom" type="button" data-capture-zoom data-original-label={L.originalCapture} data-fit-label={L.fitCapture} aria-pressed="false">{L.originalCapture}</button>
+      <button class="capture-viewer__close" type="button" data-capture-close aria-label={L.closeCapture} autofocus>
+        <Icon name="x" size={22} />
+      </button>
+    </div>
+  </div>
+  <div class="capture-viewer__viewport" tabindex="0" role="region" aria-label={L.captureViewer}>
+    <img class="capture-viewer__image" data-capture-image alt="" />
+  </div>
+</dialog>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>('[data-capture-viewer]');
+  if (dialog && typeof dialog.showModal === 'function') {
+    const image = dialog.querySelector<HTMLImageElement>('[data-capture-image]')!;
+    const title = dialog.querySelector<HTMLElement>('[data-capture-title]')!;
+    const viewport = dialog.querySelector<HTMLElement>('.capture-viewer__viewport')!;
+    const zoom = dialog.querySelector<HTMLButtonElement>('[data-capture-zoom]')!;
+    const close = dialog.querySelector<HTMLButtonElement>('[data-capture-close]')!;
+    let opener: HTMLAnchorElement | undefined;
+    const setZoom = (original: boolean) => {
+      dialog.toggleAttribute('data-original-size', original);
+      zoom.setAttribute('aria-pressed', String(original));
+      zoom.textContent = (original ? zoom.dataset.fitLabel : zoom.dataset.originalLabel)!;
+      viewport.scrollTo(0, 0);
+    };
+    document.querySelectorAll<HTMLAnchorElement>('[data-capture-open]').forEach((link) => {
+      link.addEventListener('click', (event) => {
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        event.preventDefault();
+        opener = link;
+        image.src = link.href;
+        image.alt = link.dataset.captureAlt!;
+        image.width = Number(link.dataset.captureWidth);
+        image.height = Number(link.dataset.captureHeight);
+        dialog.style.setProperty('--capture-width', `${image.width}px`);
+        title.textContent = image.alt;
+        setZoom(false);
+        dialog.showModal();
+      });
+    });
+    zoom.addEventListener('click', () => setZoom(!dialog.hasAttribute('data-original-size')));
+    close.addEventListener('click', () => dialog.close());
+    dialog.addEventListener('click', (event) => {
+      if (event.target !== dialog) return;
+      const rect = dialog.getBoundingClientRect();
+      if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) dialog.close();
+    });
+    dialog.addEventListener('close', () => {
+      image.removeAttribute('src');
+      opener?.focus({ preventScroll: true });
+    });
+  }
+</script>
+
+<style>
+  :global(html:has(.capture-viewer[open])) {
+    overflow: hidden;
+  }
+  .capture-viewer {
+    width: min(1440px, calc(100% - 32px));
+    max-width: none;
+    max-height: calc(100dvh - 32px);
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--paper);
+    color: var(--ink);
+    overflow: hidden;
+  }
+  .capture-viewer[open] {
+    display: flex;
+    flex-direction: column;
+  }
+  .capture-viewer::backdrop {
+    background: #000b;
+  }
+  .capture-viewer__toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-shrink: 0;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--line);
+  }
+  .capture-viewer__title {
+    min-width: 0;
+    font-size: 14px;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+  }
+  .capture-viewer__actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .capture-viewer__zoom,
+  .capture-viewer__close {
+    min-height: 44px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--surface);
+  }
+  .capture-viewer__zoom {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+  .capture-viewer__close {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    flex-shrink: 0;
+  }
+  .capture-viewer__viewport {
+    min-height: 0;
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+  .capture-viewer__image {
+    width: 100%;
+    max-width: var(--capture-width);
+    height: auto;
+    margin-inline: auto;
+  }
+  .capture-viewer[data-original-size] .capture-viewer__image {
+    width: var(--capture-width);
+    max-width: none;
+  }
+  @media (max-width: 600px) {
+    .capture-viewer {
+      width: calc(100% - 16px);
+      max-height: calc(100dvh - 16px);
+    }
+    .capture-viewer__toolbar {
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 12px;
+    }
+    .capture-viewer__title {
+      width: 100%;
+    }
+    .capture-viewer__actions {
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+</style>

@@ -177,6 +177,11 @@ export const en: Dict = {
     stack: 'Stack',
     next: 'Next project',
     logo: 'Logo of',
+    openCapture: 'Enlarge screenshot',
+    closeCapture: 'Close screenshot',
+    originalCapture: 'Original size',
+    fitCapture: 'Fit to width',
+    captureViewer: 'Enlarged screenshot',
   },
   cases: casesEn,
 };

@@ -9,6 +9,8 @@ import Icon from './Icon.astro';
 import Shot from './Shot.astro';
 import Feature from './Feature.astro';
 import TextLink from './TextLink.astro';
+import CaptureLink from './CaptureLink.astro';
+import CaptureViewer from './CaptureViewer.astro';
 
 interface Props {
   lang: Lang;
@@ -65,6 +67,7 @@ const label = {
   <div class="wrap cvisual__inner" data-reveal>
     <Browser url={p.site} class="cvisual__browser">
       <Shot {...p.hero} alt={`${c.name} — ${p.site}`} eager />
+      <CaptureLink img={p.hero} alt={`${c.name} — ${p.site}`} lang={lang} />
     </Browser>
     <div class="phone cvisual__phone">
       <div class="phone__screen"><Shot {...p.phone} alt={`${c.name} — ${p.site}`} /></div>
@@ -94,7 +97,7 @@ const label = {
       <h2 class="h2">{L.built}</h2>
     </header>
     <div class="cbuilt__grid">
-      {c.built.map((item, i) => <Feature item={item} img={p.built[i]} name={c.name} letter={letter(i)} i={i} />)}
+      {c.built.map((item, i) => <Feature item={item} img={p.built[i]} name={c.name} letter={letter(i)} i={i} lang={lang} />)}
     </div>
   </div>
 </section>
@@ -124,7 +127,7 @@ const label = {
         </div>
         <div class="cbuilt__grid">
           {c.extra.built.map((item, i) => (
-            <Feature item={item} img={p.extra!.built[i] ?? null} name={c.name} letter={letter(i)} i={i} />
+            <Feature item={item} img={p.extra!.built[i] ?? null} name={c.name} letter={letter(i)} i={i} lang={lang} />
           ))}
         </div>
       </div>
@@ -202,6 +205,8 @@ const label = {
     <Icon name="arrow-right" size={72} strokeWidth={1.5} class="cnext__arrow" />
   </span>
 </a>
+
+<CaptureViewer lang={lang} />
 
 <style>
   /* Cabecera */
@@ -524,6 +529,10 @@ const label = {
     }
     :global(.cvisual__browser) {
       height: auto;
+    }
+    :global(.cvisual__browser .browser__screen) {
+      flex: none;
+      aspect-ratio: 8 / 5;
     }
     :global(.cvisual__phone) {
       display: none;

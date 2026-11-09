@@ -176,6 +176,11 @@ export const es = {
     stack: 'Stack',
     next: 'Siguiente proyecto',
     logo: 'Logo de',
+    openCapture: 'Ampliar captura',
+    closeCapture: 'Cerrar captura',
+    originalCapture: 'Tamaño original',
+    fitCapture: 'Ajustar al ancho',
+    captureViewer: 'Vista ampliada de la captura',
   },
   cases: casesEs,
 };

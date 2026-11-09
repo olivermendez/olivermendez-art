@@ -4,6 +4,8 @@ import type { Piece } from '../i18n/cases.es';
 import type { Img } from '../data/projects';
 import Browser from './Browser.astro';
 import Shot from './Shot.astro';
+import CaptureLink from './CaptureLink.astro';
+import type { Lang } from '../i18n';
 
 interface Props {
   item: Piece;
@@ -11,19 +13,22 @@ interface Props {
   name: string;
   letter: string;
   i: number;
+  lang: Lang;
 }
-const { item, img, name, letter, i } = Astro.props;
+const { item, img, name, letter, i, lang } = Astro.props;
+const alt = `${name} — ${item.title}`;
 const frame = item.url ? 'browser' : (item.frame ?? 'phone');
 ---
 
-<article class="feature card-hover" data-reveal style={`--i:${i % 2}`}>
+<article class="feature card-hover" data-reveal style={`--i:${i % 2};--capture-ratio:${img?.width ?? 600} / ${img?.height ?? 1298}`}>
   {
     frame === 'browser' ? (
       <Browser url={item.url!} class="feature__frame">
-        {img ? <Shot {...img} alt={`${name} — ${item.title}`} /> : <div class="shot"><span class="shot__label">[{item.pending}]</span></div>}
+        {img ? <><Shot {...img} alt={alt} /><CaptureLink img={img} alt={alt} lang={lang} /></> : <div class="shot"><span class="shot__label">[{item.pending}]</span></div>}
       </Browser>
     ) : (
       <div class:list={['feature__frame', 'feature__device', `feature__device--${frame}`]}>
+        {img && <CaptureLink img={img} alt={alt} lang={lang} />}
         <div class:list={[frame === 'tablet' ? 'tablet' : 'phone', `feature__${frame}`]}>
           <div class:list={[frame === 'tablet' ? 'tablet__screen' : 'phone__screen', 'shot-wrap']}>
             {img ? <Shot {...img} alt={`${name} — ${item.title}`} /> : <span class="shot__label">[{item.pending}]</span>}
@@ -50,6 +55,7 @@ const frame = item.url ? 'browser' : (item.frame ?? 'phone');
     height: 380px;
   }
   .feature__device {
+    position: relative;
     display: grid;
     place-items: center;
     background: var(--surface);
@@ -86,15 +92,37 @@ const frame = item.url ? 'browser' : (item.frame ?? 'phone');
   }
 
   @media (max-width: 900px) {
-    :global(.feature__frame) {
-      height: 240px;
+    :global(.browser.feature__frame) {
+      height: auto;
+    }
+    :global(.browser.feature__frame .browser__screen) {
+      flex: none;
+      aspect-ratio: var(--capture-ratio);
+    }
+    .feature__device {
+      height: auto;
+      padding: 20px;
+    }
+    .feature__device--phone {
+      align-items: center;
+    }
+    .feature__tablet {
+      width: 100%;
+      max-width: 560px;
+      height: auto;
+      aspect-ratio: auto;
+    }
+    .feature__device :global(.phone__screen),
+    .feature__device :global(.tablet__screen) {
+      height: auto;
+      aspect-ratio: var(--capture-ratio);
     }
     .feature {
       gap: 18px;
     }
     .feature__phone {
-      width: 150px;
-      height: 300px;
+      width: 180px;
+      height: auto;
     }
     .feature__title {
       font-size: 24px;

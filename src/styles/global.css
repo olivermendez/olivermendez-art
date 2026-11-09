@@ -361,8 +361,10 @@ button {
   object-position: left top;
   transition: object-position 2.5s linear;
 }
-.card-hover:hover .shot img {
-  object-position: left bottom;
+@media (hover: hover) and (pointer: fine) {
+  .card-hover:hover .shot img {
+    object-position: left bottom;
+  }
 }
 .shot__label {
   font-family: var(--font-mono);
