@@ -35,8 +35,13 @@ export const en: Dict = {
     contact: 'Contact',
   },
   demo: {
-    url: 'autolisto — AI search',
-    alt: 'AutoListo AI search: “Automatic SUV, under RD$1.5M, low mileage” and its results',
+    galleryLabel: 'Explore AutoListo workflows',
+    slides: {
+      home: { label: 'Home', caption: 'Explore the catalog and find vehicles by make, model and year.', alt: 'AutoListo home page with search and recently listed vehicles' },
+      listing: { label: 'Listing', caption: 'Browse photos, pricing and the details of each vehicle.', alt: 'Kia Sorento listing on AutoListo with its photo gallery and price' },
+      compare: { label: 'Comparison', caption: 'Compare the price, year and mileage of two vehicles side by side.', alt: 'AutoListo comparison between a 2020 Hyundai Sonata and a 2022 Hyundai Sonata' },
+      ai: { label: 'AI search', caption: 'Describe what you need in your own words and browse the AI search results.', alt: 'AutoListo AI search showing a natural-language query and its results' },
+    },
     fichaUrl: 'autolisto — vehicle page',
   },
   spec: { year: 'Year', role: 'Role', platform: 'Platform', stack: 'Stack', status: 'Status' },

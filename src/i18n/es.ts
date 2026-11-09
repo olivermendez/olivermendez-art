@@ -34,8 +34,13 @@ export const es = {
     contact: 'Contacto',
   },
   demo: {
-    url: 'autolisto — búsqueda con IA',
-    alt: 'Búsqueda con IA de AutoListo: «Jeepeta automática, menos de RD$1.5M, poco millaje» y los resultados',
+    galleryLabel: 'Explora los flujos de AutoListo',
+    slides: {
+      home: { label: 'Inicio', caption: 'Explora el catálogo y encuentra vehículos por marca, modelo y año.', alt: 'Inicio de AutoListo con buscador y vehículos recién publicados' },
+      listing: { label: 'Anuncio', caption: 'Revisa las fotos, el precio y los detalles de cada vehículo.', alt: 'Anuncio de un Kia Sorento en AutoListo, con galería de fotos y precio' },
+      compare: { label: 'Comparación', caption: 'Compara precio, año y kilometraje de dos vehículos, lado a lado.', alt: 'Comparación en AutoListo entre un Hyundai Sonata 2020 y un Hyundai Sonata 2022' },
+      ai: { label: 'Búsqueda con IA', caption: 'Describe lo que buscas en tus palabras y consulta los resultados de la IA.', alt: 'Búsqueda con IA de AutoListo con una consulta en lenguaje natural y sus resultados' },
+    },
     fichaUrl: 'autolisto — ficha del vehículo',
   },
   spec: { year: 'Año', role: 'Rol', platform: 'Plataforma', stack: 'Stack', status: 'Estado' },

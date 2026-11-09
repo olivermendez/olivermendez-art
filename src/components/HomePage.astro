@@ -9,6 +9,7 @@ import Pending from './Pending.astro';
 import Spec from './Spec.astro';
 import Shot from './Shot.astro';
 import Tools from './Tools.astro';
+import ProjectGallery from './ProjectGallery.astro';
 
 interface Props {
   lang: Lang;
@@ -49,9 +50,7 @@ const clients = caseIds.map((id) => C[id].name);
       <TextLink href="#contacto" arrow="→">{T.hero.contact}</TextLink>
     </div>
 
-    <Browser url={T.demo.url} class="hero__demo" data-reveal>
-      <Shot {...P.autolisto.built[0]!} alt={T.demo.alt} eager />
-    </Browser>
+    <ProjectGallery lang={lang} />
 
     <ul class="hero__clients" data-reveal>
       {clients.map((c) => <li>{c}</li>)}
@@ -392,9 +391,6 @@ const clients = caseIds.map((id) => C[id].name);
   .hero__profiles {
     display: flex;
     gap: 28px;
-  }
-  :global(.hero__demo) {
-    height: 640px;
   }
   .hero__clients {
     display: flex;
@@ -792,12 +788,6 @@ const clients = caseIds.map((id) => C[id].name);
     }
     .hero__profiles {
       gap: 24px;
-    }
-    :global(.hero__demo) {
-      height: auto;
-    }
-    :global(.hero__demo .browser__screen) {
-      aspect-ratio: 16 / 10;
     }
     .hero__clients {
       flex-wrap: wrap;

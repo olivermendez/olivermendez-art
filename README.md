@@ -18,6 +18,8 @@ Incluye temas claro y oscuro, casos de estudio y una sección de tecnologías y 
 
 - `src/components/HomePage.astro`: portada y proyectos destacados.
 - `src/components/Tools.astro`: sección de tecnologías y herramientas.
+- `src/components/ProjectGallery.astro`: galería manual de los flujos de AutoListo.
+- `src/data/gallery.ts`: capturas y orden de las vistas de la galería.
 - `src/data/projects.ts`: imágenes, destinos y orden de navegación entre casos.
 - `src/data/tools.ts`: tecnologías y herramientas agrupadas por uso.
 - `src/data/links.ts`: perfiles y vías de contacto.

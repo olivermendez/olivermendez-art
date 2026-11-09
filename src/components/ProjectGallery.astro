@@ -1,0 +1,192 @@
+---
+import { t, type Lang } from '../i18n';
+import { autolistoGallery } from '../data/gallery';
+import Browser from './Browser.astro';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const T = t(lang).demo;
+const slides = autolistoGallery.map((slide) => ({ ...slide, ...T.slides[slide.id] }));
+const prefix = 'autolisto-gallery';
+---
+
+<section class="gallery" id={prefix} aria-label={T.galleryLabel} data-gallery data-reveal>
+  <Browser url={slides[0].url} class="gallery__browser">
+    <div class="gallery__track" data-gallery-track>
+      {slides.map((slide, index) => (
+        <div
+          class="gallery__slide"
+          id={`${prefix}-panel-${index}`}
+          role="tabpanel"
+          aria-labelledby={`${prefix}-tab-${index}`}
+          data-gallery-panel
+          data-caption={slide.caption}
+          data-url={slide.url}
+        >
+          <img
+            src={slide.image.src}
+            alt={slide.alt}
+            width={slide.image.width}
+            height={slide.image.height}
+            loading={index === 0 ? 'eager' : 'lazy'}
+            fetchpriority={index === 0 ? 'high' : 'low'}
+            decoding="async"
+          />
+        </div>
+      ))}
+    </div>
+  </Browser>
+
+  <div class="gallery__tabs" role="tablist" aria-label={T.galleryLabel}>
+    {slides.map((slide, index) => (
+      <button
+        class="gallery__tab"
+        type="button"
+        role="tab"
+        id={`${prefix}-tab-${index}`}
+        aria-controls={`${prefix}-panel-${index}`}
+        aria-selected={index === 0 ? 'true' : 'false'}
+        tabindex={index === 0 ? 0 : -1}
+        data-gallery-tab
+      >{slide.label}</button>
+    ))}
+  </div>
+  <div class="gallery__caption">
+    <p data-gallery-caption aria-live="polite" aria-atomic="true">{slides[0].caption}</p>
+    <span class="gallery__count" data-gallery-count aria-hidden="true">01 / 04</span>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-gallery]').forEach((gallery) => {
+    const track = gallery.querySelector<HTMLElement>('[data-gallery-track]')!;
+    const tabs = [...gallery.querySelectorAll<HTMLButtonElement>('[data-gallery-tab]')];
+    const panels = [...gallery.querySelectorAll<HTMLElement>('[data-gallery-panel]')];
+    const caption = gallery.querySelector<HTMLElement>('[data-gallery-caption]')!;
+    const counter = gallery.querySelector<HTMLElement>('[data-gallery-count]')!;
+    const url = gallery.querySelector<HTMLElement>('.browser__url')!;
+    let active = 0;
+
+    const render = (index: number) => {
+      active = index;
+      tabs.forEach((tab, i) => {
+        tab.setAttribute('aria-selected', String(i === index));
+        tab.tabIndex = i === index ? 0 : -1;
+        panels[i].setAttribute('aria-hidden', String(i !== index));
+      });
+      caption.textContent = panels[index].dataset.caption ?? '';
+      url.textContent = panels[index].dataset.url ?? '';
+      counter.textContent = `${String(index + 1).padStart(2, '0')} / ${String(panels.length).padStart(2, '0')}`;
+    };
+    const select = (index: number, focus = false) => {
+      render(index);
+      track.scrollTo({ left: index * track.clientWidth, behavior: 'instant' });
+      if (focus) tabs[index].focus();
+    };
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => select(index));
+      tab.addEventListener('keydown', (event) => {
+        let next: number;
+        if (event.key === 'ArrowRight') next = (index + 1) % tabs.length;
+        else if (event.key === 'ArrowLeft') next = (index - 1 + tabs.length) % tabs.length;
+        else if (event.key === 'Home') next = 0;
+        else if (event.key === 'End') next = tabs.length - 1;
+        else return;
+        event.preventDefault();
+        select(next, true);
+      });
+    });
+
+    // El desplazamiento es nativo: funciona con gestos táctiles y trackpad.
+    let pending = false;
+    track.addEventListener('scroll', () => {
+      if (pending) return;
+      pending = true;
+      requestAnimationFrame(() => {
+        pending = false;
+        if (!track.clientWidth) return;
+        const index = Math.max(0, Math.min(panels.length - 1, Math.round(track.scrollLeft / track.clientWidth)));
+        if (index !== active) render(index);
+      });
+    }, { passive: true });
+    if ('ResizeObserver' in window) {
+      new ResizeObserver(() => {
+        track.scrollTo({ left: active * track.clientWidth, behavior: 'instant' });
+      }).observe(track);
+    }
+    render(0);
+  });
+</script>
+
+<style>
+  .gallery { min-width: 0; }
+  .gallery__track {
+    display: flex;
+    aspect-ratio: 16 / 10;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+    background: #fff;
+  }
+  .gallery__track::-webkit-scrollbar { display: none; }
+  .gallery__slide {
+    position: relative;
+    flex: 0 0 100%;
+    min-width: 0;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+  .gallery__slide img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .gallery__tabs {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    border-bottom: 1px solid var(--line);
+    margin-top: 12px;
+  }
+  .gallery__tab {
+    padding: 16px 12px;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--ink-muted);
+  }
+  .gallery__tab:hover { color: var(--ink); }
+  .gallery__tab[aria-selected='true'] {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 5%, transparent);
+  }
+  .gallery__caption {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 24px;
+    padding-top: 16px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--ink-muted);
+  }
+  .gallery__count {
+    flex-shrink: 0;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink);
+  }
+  @media (max-width: 600px) {
+    .gallery__tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .gallery__tab { padding: 12px 8px; font-size: 12px; }
+    .gallery__caption { gap: 16px; font-size: 12px; }
+    .gallery__count { font-size: 11px; }
+  }
+</style>
