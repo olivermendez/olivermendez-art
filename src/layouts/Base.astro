@@ -3,6 +3,7 @@ import '../styles/global.css';
 import { t, type Lang, type Paths } from '../i18n';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+import { links } from '../data/links';
 
 interface Props {
   lang: Lang;
@@ -88,6 +89,7 @@ const alternates = { es: url(paths.es), en: url(paths.en) };
         '@context': 'https://schema.org',
         '@type': 'Person',
         name: 'Oliver Méndez',
+        email: links.email,
         alternateName: 'Oliver Yunior Méndez Arias',
         url: site.href,
         image: url('/img/oliver-mendez.jpg'),
@@ -95,7 +97,7 @@ const alternates = { es: url(paths.es), en: url(paths.en) };
         worksFor: { '@type': 'Organization', name: 'Simlimites' },
         address: { '@type': 'PostalAddress', addressLocality: 'Santo Domingo', addressCountry: 'DO' },
         knowsAbout: ['Flutter', 'Next.js', 'TypeScript', 'Supabase', 'Model Context Protocol', 'AI agents', 'e-CF'],
-        sameAs: ['https://www.linkedin.com/in/olivermendeza'],
+        sameAs: [links.linkedin, links.github].filter(Boolean),
       })}
     />
   </head>

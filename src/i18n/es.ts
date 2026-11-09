@@ -16,7 +16,6 @@ export const es = {
     about: 'Sobre mí',
     tools: 'Herramientas',
     contact: 'Contacto',
-    cv: 'CV',
     theme: 'Cambiar tema claro u oscuro',
     menu: 'Abrir menú',
     close: 'Cerrar menú',
@@ -32,7 +31,6 @@ export const es = {
     em: 'usa.',
     lead: 'Ingeniero de software full stack. Diseño y desarrollo productos web, apps móviles e integraciones de IA (agentes, servidores MCP, búsqueda en lenguaje natural), del primer flujo a producción.',
     ctaProjects: 'Ver proyectos',
-    ctaCv: 'Descargar CV',
     contact: 'Contacto',
   },
   demo: {
@@ -145,20 +143,16 @@ export const es = {
     hire: {
       eyebrow: 'Para empresas',
       title: 'Sumarme a tu equipo',
-      desc: 'Mi CV, mi código y dónde encontrarme.',
-      cv: 'Descargar CV',
+      desc: 'Mi código, mi experiencia y dónde encontrarme.',
     },
     project: {
       eyebrow: 'Para negocios',
       title: 'Tengo un proyecto',
       desc: 'Cuéntame qué necesitas y te respondo con una propuesta.',
       whatsapp: 'Escribir por WhatsApp',
-      call: 'Agendar llamada',
+      email: 'Escribir por correo',
     },
     emailLabel: 'O escríbeme a',
-    pendingCv: 'CV',
-    pendingNumber: 'número',
-    pendingCalendly: 'Calendly',
     pendingEmail: 'email profesional',
   },
   footer: {

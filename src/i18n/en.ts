@@ -17,7 +17,6 @@ export const en: Dict = {
     about: 'About',
     tools: 'Tools',
     contact: 'Contact',
-    cv: 'CV',
     theme: 'Toggle light or dark theme',
     menu: 'Open menu',
     close: 'Close menu',
@@ -33,7 +32,6 @@ export const en: Dict = {
     em: 'use.',
     lead: 'Full stack software engineer. I design and build web products, mobile apps and AI integrations (agents, MCP servers, natural-language search), from the first flow to production.',
     ctaProjects: 'See projects',
-    ctaCv: 'Download CV',
     contact: 'Contact',
   },
   demo: {
@@ -146,20 +144,16 @@ export const en: Dict = {
     hire: {
       eyebrow: 'For companies',
       title: 'Join your team',
-      desc: 'My CV, my code and where to find me.',
-      cv: 'Download CV',
+      desc: 'My code, experience and where to find me.',
     },
     project: {
       eyebrow: 'For businesses',
       title: 'I have a project',
       desc: 'Tell me what you need and I’ll get back to you with a proposal.',
       whatsapp: 'Message on WhatsApp',
-      call: 'Book a call',
+      email: 'Send an email',
     },
     emailLabel: 'Or email me at',
-    pendingCv: 'CV',
-    pendingNumber: 'number',
-    pendingCalendly: 'Calendly',
     pendingEmail: 'professional email',
   },
   footer: {

@@ -20,7 +20,7 @@ Incluye temas claro y oscuro, casos de estudio y una sección de tecnologías y 
 - `src/components/Tools.astro`: sección de tecnologías y herramientas.
 - `src/data/projects.ts`: imágenes, destinos y orden de navegación entre casos.
 - `src/data/tools.ts`: tecnologías y herramientas agrupadas por uso.
-- `src/data/links.ts`: CV, perfiles y vías de contacto.
+- `src/data/links.ts`: perfiles y vías de contacto.
 - `src/i18n/`: textos generales y casos de estudio en ambos idiomas.
 - `public/`: capturas de proyectos, logos y otros recursos estáticos.
 

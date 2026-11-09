@@ -1,6 +1,5 @@
 ---
 import { t, homePaths, otherLang, type Lang, type Paths } from '../i18n';
-import { links } from '../data/links';
 import Icon from './Icon.astro';
 
 interface Props {
@@ -11,7 +10,6 @@ const { lang, paths } = Astro.props;
 const T = t(lang).nav;
 const home = homePaths[lang];
 const alt = otherLang(lang);
-const cv = links.cv[lang];
 
 const items = [
   { label: T.projects, href: `${home}#proyectos` },
@@ -31,9 +29,6 @@ const items = [
 
     <nav class="nav__links" aria-label={lang === 'es' ? 'Principal' : 'Main'}>
       {items.map((i) => <a href={i.href}>{i.label}</a>)}
-      <a class="nav__cv" href={cv ?? `${home}#contacto`} download={cv ? true : undefined}>
-        {T.cv} <span aria-hidden="true">↓</span>
-      </a>
     </nav>
 
     <div class="nav__tools">
@@ -69,7 +64,6 @@ const items = [
   <div class="mmenu" id="menu-movil" hidden>
     <nav class="wrap mmenu__inner" aria-label={lang === 'es' ? 'Menú' : 'Menu'}>
       {items.map((i) => <a href={i.href}>{i.label}</a>)}
-      <a href={cv ?? `${home}#contacto`} download={cv ? true : undefined}>{T.cv} <span aria-hidden="true">↓</span></a>
       <button class="mmenu__theme" type="button" data-theme-toggle>
         <span class="nav__round" aria-hidden="true">
           <Icon name="moon" class="i-moon" />
@@ -129,9 +123,6 @@ const items = [
   }
   .nav__links a:hover::after {
     transform: scaleX(1);
-  }
-  .nav__cv {
-    font-weight: 500;
   }
   .nav__tools {
     display: flex;

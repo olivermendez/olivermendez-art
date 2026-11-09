@@ -15,7 +15,6 @@ interface Props {
 }
 const { lang } = Astro.props;
 const T = t(lang);
-const cv = links.cv[lang];
 const C = T.cases;
 const P = projects;
 const caseUrl = (id: keyof typeof projects) => casePaths(id)[lang];
@@ -40,7 +39,6 @@ const clients = caseIds.map((id) => C[id].name);
         <p class="hero__lead">{T.hero.lead}</p>
         <div class="hero__actions">
           <Button href="#proyectos">{T.hero.ctaProjects}</Button>
-          <Button href={cv ?? '#contacto'} variant="secondary" arrow="↓" download={!!cv}>{T.hero.ctaCv}</Button>
         </div>
       </div>
     </div>
@@ -298,14 +296,12 @@ const clients = caseIds.map((id) => C[id].name);
           <p class="muted">{T.contact.hire.desc}</p>
         </div>
         <div class="ccard__actions">
-          <Button href={cv} download={!!cv}>{T.contact.hire.cv}</Button>
           <TextLink href={links.linkedin} arrow="↗">LinkedIn</TextLink>
           <TextLink href={links.github} arrow="↗">GitHub</TextLink>
         </div>
         {
-          (!cv || !links.linkedin || !links.github) && (
+          (!links.linkedin || !links.github) && (
             <div class="ccard__pending">
-              {!cv && <Pending lang={lang} label={T.contact.pendingCv} />}
               {!links.linkedin && <Pending lang={lang} label="LinkedIn" />}
               {!links.github && <Pending lang={lang} label="GitHub" />}
             </div>
@@ -319,17 +315,9 @@ const clients = caseIds.map((id) => C[id].name);
           <p class="muted">{T.contact.project.desc}</p>
         </div>
         <div class="ccard__actions">
-          <Button href={links.whatsapp} external>{T.contact.project.whatsapp}</Button>
-          <Button href={links.calendly} variant="secondary" external>{T.contact.project.call}</Button>
+          <Button href={mailto(links.email)}>{T.contact.project.email}</Button>
+          {links.whatsapp && <Button href={links.whatsapp} variant="secondary" external>{T.contact.project.whatsapp}</Button>}
         </div>
-        {
-          (!links.whatsapp || !links.calendly) && (
-            <div class="ccard__pending">
-              {!links.whatsapp && <Pending lang={lang} label={T.contact.pendingNumber} />}
-              {!links.calendly && <Pending lang={lang} label={T.contact.pendingCalendly} />}
-            </div>
-          )
-        }
       </article>
     </div>
     <p class="contact__email" data-reveal>
