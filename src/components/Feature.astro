@@ -1,0 +1,102 @@
+---
+// Una pieza de «Qué construí»: captura en su marco (navegador, iPhone o iPad) y su texto.
+import type { Piece } from '../i18n/cases.es';
+import type { Img } from '../data/projects';
+import Browser from './Browser.astro';
+import Shot from './Shot.astro';
+
+interface Props {
+  item: Piece;
+  img: Img | null;
+  name: string;
+  letter: string;
+  i: number;
+}
+const { item, img, name, letter, i } = Astro.props;
+const frame = item.url ? 'browser' : (item.frame ?? 'phone');
+---
+
+<article class="feature card-hover" data-reveal style={`--i:${i % 2}`}>
+  {
+    frame === 'browser' ? (
+      <Browser url={item.url!} class="feature__frame">
+        {img ? <Shot {...img} alt={`${name} — ${item.title}`} /> : <div class="shot"><span class="shot__label">[{item.pending}]</span></div>}
+      </Browser>
+    ) : (
+      <div class:list={['feature__frame', 'feature__device', `feature__device--${frame}`]}>
+        <div class:list={[frame === 'tablet' ? 'tablet' : 'phone', `feature__${frame}`]}>
+          <div class:list={[frame === 'tablet' ? 'tablet__screen' : 'phone__screen', 'shot-wrap']}>
+            {img ? <Shot {...img} alt={`${name} — ${item.title}`} /> : <span class="shot__label">[{item.pending}]</span>}
+          </div>
+        </div>
+      </div>
+    )
+  }
+  <div class="feature__text">
+    <span class="eyebrow">{letter}</span>
+    <h3 class="display feature__title">{item.title}</h3>
+    <p class="muted">{item.desc}</p>
+  </div>
+</article>
+
+<style>
+  .feature {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+  :global(.feature__frame) {
+    height: 380px;
+  }
+  .feature__device {
+    display: grid;
+    place-items: center;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .feature__device--phone {
+    align-items: start;
+    padding-top: 36px;
+  }
+  .feature__phone {
+    width: 200px;
+    height: 400px;
+  }
+  /* iPad horizontal (4:3) para el quiosco */
+  .feature__tablet {
+    height: 84%;
+    aspect-ratio: 4 / 3.15;
+  }
+  .shot-wrap {
+    display: grid;
+    place-items: center;
+  }
+  .feature__text {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    line-height: 1.55;
+  }
+  .feature__title {
+    font-size: 30px;
+    line-height: 1.15;
+  }
+
+  @media (max-width: 900px) {
+    :global(.feature__frame) {
+      height: 240px;
+    }
+    .feature {
+      gap: 18px;
+    }
+    .feature__phone {
+      width: 150px;
+      height: 300px;
+    }
+    .feature__title {
+      font-size: 24px;
+    }
+  }
+</style>

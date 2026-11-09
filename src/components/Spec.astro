@@ -1,0 +1,35 @@
+---
+import { t, type Lang } from '../i18n';
+
+type Value = string | null | undefined;
+interface Props {
+  lang: Lang;
+  spec: { year: Value; role: Value; platform: Value; stack: Value; status: Value };
+  class?: string;
+}
+const { lang, spec, class: cls } = Astro.props;
+const L = t(lang).spec;
+const pendingText = `[${t(lang).pending}]`;
+const rows = [
+  { k: L.year, v: spec.year },
+  { k: L.role, v: spec.role },
+  { k: L.platform, v: spec.platform },
+  { k: L.stack, v: spec.stack },
+  { k: L.status, v: spec.status, status: true },
+];
+---
+
+<dl class:list={['spec', cls]}>
+  {
+    rows.map((r) => (
+      <div class="spec__row">
+        <dt class="spec__k">{r.k}</dt>
+        {r.v ? (
+          <dd class="spec__v">{r.status ? <span class="status">{r.v}</span> : r.v}</dd>
+        ) : (
+          <dd class="spec__v spec__v--pending">{pendingText}</dd>
+        )}
+      </div>
+    ))
+  }
+</dl>

@@ -1,0 +1,102 @@
+---
+import { t, type Lang } from '../i18n';
+import { links, mailto } from '../data/links';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const T = t(lang).footer;
+const items = [
+  { label: 'LinkedIn', href: links.linkedin, ext: true },
+  { label: 'GitHub', href: links.github, ext: true },
+  { label: T.email, href: mailto(links.email), ext: false },
+];
+---
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot__inner">
+      <p class="foot__copy">{T.copy}</p>
+      <ul class="foot__links">
+        {
+          items.map((i) => (
+            <li>
+              {i.href ? (
+                <a href={i.href} {...(i.ext ? { target: '_blank', rel: 'noopener' } : {})}>
+                  {i.label}
+                </a>
+              ) : (
+                <span>{i.label}</span>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+      <p class="foot__time">
+        <span class="foot__dot" aria-hidden="true"></span>
+        SDQ <time data-sdq-clock>14:32</time>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .foot {
+    background: var(--paper);
+  }
+  .foot__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    min-height: 72px;
+    padding-block: 28px;
+    border-top: 1px solid var(--line);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    line-height: 1.3;
+  }
+  .foot__copy {
+    color: var(--ink-muted);
+  }
+  .foot__links {
+    display: flex;
+    gap: 24px;
+  }
+  .foot__links a:hover {
+    color: var(--accent);
+  }
+  .foot__time {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .foot__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  @media (min-width: 901px) {
+    .foot__inner > * {
+      flex: 1;
+    }
+    .foot__links {
+      justify-content: center;
+    }
+    .foot__time {
+      justify-content: flex-end;
+    }
+  }
+  @media (max-width: 900px) {
+    .foot__inner {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 14px;
+    }
+  }
+</style>

@@ -1,0 +1,607 @@
+---
+import { t, homePaths, casePaths, type Lang } from '../i18n';
+import { projects } from '../data/projects';
+import type { CaseId } from '../i18n/cases.es';
+import Browser from './Browser.astro';
+import Button from './Button.astro';
+import Spec from './Spec.astro';
+import Icon from './Icon.astro';
+import Shot from './Shot.astro';
+import Feature from './Feature.astro';
+import TextLink from './TextLink.astro';
+
+interface Props {
+  lang: Lang;
+  id: CaseId;
+}
+const { lang, id } = Astro.props;
+const T = t(lang);
+const L = T.caseLabels;
+const c = T.cases[id];
+const p = projects[id];
+const home = homePaths[lang];
+const next = T.cases[p.next];
+const letter = (i: number) => String.fromCharCode(65 + i);
+
+// Las secciones se numeran según las que tenga cada caso.
+let n = 0;
+const num = () => String(++n).padStart(2, '0');
+const label = {
+  problem: c.problem ? `${num()} — ${L.problem}` : '',
+  built: `${num()} — ${L.built}`,
+  extra: c.extra ? `${num()} — ${c.extra.label}` : '',
+  decisions: c.decisions ? `${num()} — ${L.decisions}` : '',
+  seo: c.seo ? `${num()} — ${L.seo}` : '',
+  stack: `${num()} — ${L.stack}`,
+};
+---
+
+<!-- Cabecera -->
+<section class="band chead">
+  <div class="wrap chead__inner">
+    <div class="chead__top" data-reveal>
+      <p class="eyebrow chead__crumb">
+        <a href={`${home}#proyectos`}>← {L.back}</a>
+        <span aria-hidden="true">/</span>
+        <span>{c.no}</span>
+      </p>
+      <span class="chead__logo" style={p.logoBg ? `background:${p.logoBg};border-color:${p.logoBg}` : undefined}>
+        <img src={p.logo.src} width={p.logo.width} height={p.logo.height} alt={`${L.logo} ${c.name}`} />
+      </span>
+    </div>
+    <h1 class="display chead__title" data-reveal style="--i:1">{c.name}</h1>
+    <div class="chead__row" data-reveal style="--i:2">
+      <div class="chead__left">
+        <p class="chead__desc">{c.desc}</p>
+        {p.url && <div><Button href={p.url} arrow="↗" external>{`${L.visit} ${c.name}`}</Button></div>}
+      </div>
+      <Spec lang={lang} spec={c.spec} class="chead__spec" />
+    </div>
+  </div>
+</section>
+
+<!-- Visual grande -->
+<section class="band band--surface cvisual">
+  <div class="wrap cvisual__inner" data-reveal>
+    <Browser url={p.site} class="cvisual__browser">
+      <Shot {...p.hero} alt={`${c.name} — ${p.site}`} eager />
+    </Browser>
+    <div class="phone cvisual__phone">
+      <div class="phone__screen"><Shot {...p.phone} alt={`${c.name} — ${p.site}`} /></div>
+    </div>
+  </div>
+</section>
+
+{
+  c.problem && (
+    <section class="band band--line">
+      <div class="wrap csplit cproblem">
+        <p class="eyebrow" data-reveal>{label.problem}</p>
+        <div class="cproblem__text" data-reveal style="--i:1">
+          <h2 class="display cproblem__title">{c.problem.title}</h2>
+          <p class="muted cproblem__desc">{c.problem.desc}</p>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<!-- Qué construí -->
+<section class="band">
+  <div class="wrap cbuilt">
+    <header class="sec-head" data-reveal>
+      <p class="eyebrow">{label.built}</p>
+      <h2 class="h2">{L.built}</h2>
+    </header>
+    <div class="cbuilt__grid">
+      {c.built.map((item, i) => <Feature item={item} img={p.built[i]} name={c.name} letter={letter(i)} i={i} />)}
+    </div>
+  </div>
+</section>
+
+{
+  c.extra && p.extra && (
+    <section class="band band--surface">
+      <div class="wrap cextra">
+        <header class="sec-head" data-reveal>
+          <p class="eyebrow eyebrow--accent">{label.extra}</p>
+          <h2 class="h2">{c.extra.title}</h2>
+        </header>
+        <div class="cextra__intro" data-reveal>
+          <div class="cextra__lead">
+            <p class="cextra__desc">{c.extra.desc}</p>
+            <div>
+              <TextLink href={p.extra.url} arrow="↗">
+                {p.extra.url.replace('https://', '')}
+              </TextLink>
+            </div>
+          </div>
+          <ul class="cextra__points">
+            {c.extra.points.map((pt) => (
+              <li>{pt}</li>
+            ))}
+          </ul>
+        </div>
+        <div class="cbuilt__grid">
+          {c.extra.built.map((item, i) => (
+            <Feature item={item} img={p.extra!.built[i] ?? null} name={c.name} letter={letter(i)} i={i} />
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+{
+  c.decisions && (
+    <section class="band band--surface">
+      <div class="wrap cdec">
+        <header class="cdec__head" data-reveal>
+          <p class="eyebrow">{label.decisions}</p>
+          <h2 class="h2">{L.decisionsTitle}</h2>
+        </header>
+        <div class="cdec__list">
+          {c.decisions.map((d) => (
+            <article class="decision" data-reveal>
+              <p class="eyebrow eyebrow--accent decision__tag">{d.tag}</p>
+              <blockquote class="display decision__quote">{d.quote}</blockquote>
+              <p class="muted decision__desc">{d.desc}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+{
+  c.seo && (
+    <section class="band band--line">
+      <div class="wrap cseo">
+        <header class="cseo__head" data-reveal>
+          <p class="eyebrow eyebrow--accent">{label.seo}</p>
+          <h2 class="h2">{L.seoTitle}</h2>
+        </header>
+        <div class="cseo__cols">
+          {[c.seo.done, c.seo.evidence].map((b, i) => (
+            <div class="cseo__col" data-reveal style={`--i:${i}`}>
+              <h3 class="cseo__title">{b.title}</h3>
+              <p class="muted">{b.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<!-- Stack en detalle -->
+<section class="band band--line">
+  <div class="wrap csplit cstack">
+    <p class="eyebrow" data-reveal>{label.stack}</p>
+    <dl class="cstack__table" data-reveal style="--i:1">
+      {
+        c.stack.map(([k, v]) => (
+          <div class="cstack__row">
+            <dt class="eyebrow">{k}</dt>
+            <dd class="mono">{v}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+</section>
+
+<!-- Siguiente proyecto -->
+<a class="cnext" href={casePaths(p.next)[lang]}>
+  <span class="wrap cnext__inner">
+    <span class="cnext__text">
+      <span class="eyebrow cnext__label">{L.next} — {next.no}</span>
+      <span class="display cnext__name">{next.name}</span>
+    </span>
+    <Icon name="arrow-right" size={72} strokeWidth={1.5} class="cnext__arrow" />
+  </span>
+</a>
+
+<style>
+  /* Cabecera */
+  .chead__inner {
+    display: flex;
+    flex-direction: column;
+    padding-block: 88px 72px;
+  }
+  .chead__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .chead__crumb {
+    display: flex;
+    gap: 16px;
+  }
+  /* El logo va sobre blanco en los dos temas: es el de cada marca, sin teñir */
+  .chead__logo {
+    display: inline-flex;
+    align-items: center;
+    height: 64px;
+    padding: 12px 18px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+  }
+  .chead__logo img {
+    width: auto;
+    height: 100%;
+    max-width: 200px;
+    object-fit: contain;
+  }
+  .chead__crumb a:hover {
+    color: var(--ink);
+  }
+  .chead__title {
+    margin-top: 40px;
+    font-size: clamp(64px, 8.34vw, 120px);
+    line-height: 1;
+    letter-spacing: -0.017em;
+  }
+  .chead__row {
+    display: grid;
+    grid-template-columns: 1fr 540px;
+    gap: 64px;
+    align-items: start;
+    margin-top: 48px;
+  }
+  .chead__left {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+  .chead__desc {
+    max-width: 500px;
+    font-size: 22px;
+    line-height: 1.45;
+  }
+
+  /* Visual grande */
+  .cvisual__inner {
+    display: flex;
+    align-items: flex-end;
+    gap: 32px;
+    padding-block: 72px;
+  }
+  :global(.cvisual__browser) {
+    flex: 1;
+    min-width: 0;
+    height: 600px;
+  }
+  :global(.cvisual__phone) {
+    width: 280px;
+    height: 580px;
+    flex-shrink: 0;
+  }
+
+  /* Bloques de dos columnas (etiqueta + contenido) */
+  .csplit {
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    align-items: start;
+  }
+
+  .cproblem {
+    padding-block: 120px 0;
+  }
+  .cproblem__text {
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+  }
+  .cproblem__title {
+    font-size: clamp(30px, 3.06vw, 44px);
+    line-height: 1.18;
+  }
+  .cproblem__desc {
+    font-size: 20px;
+    line-height: 1.55;
+  }
+
+  /* Qué construí */
+  .cbuilt {
+    display: flex;
+    flex-direction: column;
+    gap: 56px;
+    padding-block: 120px;
+  }
+  .cbuilt__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px 24px;
+  }
+  /* Producto relacionado (p. ej. portal de empleos) */
+  .cextra {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+    padding-block: 120px;
+  }
+  .cextra__intro {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+  }
+  .cextra__lead {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .cextra__desc {
+    font-size: 20px;
+    line-height: 1.55;
+  }
+  .cextra__points {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--line);
+  }
+  .cextra__points li {
+    padding: 14px 0 14px 24px;
+    border-bottom: 1px solid var(--line);
+    color: var(--ink-muted);
+    line-height: 1.55;
+    position: relative;
+  }
+  .cextra__points li::before {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 24px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  /* Decisiones */
+  .cdec {
+    display: flex;
+    flex-direction: column;
+    gap: 56px;
+    padding-block: 120px;
+  }
+  .cdec__head {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .decision {
+    display: grid;
+    grid-template-columns: 160px 1fr 412px;
+    gap: 44px;
+    padding-block: 44px;
+    border-top: 1px solid var(--line);
+  }
+  .decision__tag {
+    padding-top: 6px;
+  }
+  .decision__quote {
+    margin: 0;
+    max-width: 520px;
+    font-size: clamp(26px, 2.5vw, 36px);
+    line-height: 1.2;
+  }
+  .decision__desc {
+    font-size: 17px;
+    line-height: 1.6;
+  }
+
+  /* SEO */
+  .cseo {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    padding-block: 88px;
+  }
+  .cseo__head {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+  .cseo__cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+  }
+  .cseo__col {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    font-size: 15px;
+    line-height: 1.55;
+  }
+  .cseo__title {
+    font-size: 20px;
+    font-weight: 400;
+  }
+
+  /* Stack */
+  .cstack {
+    padding-block: 96px;
+  }
+  .cstack__table {
+    border-top: 1px solid var(--line);
+  }
+  .cstack__row {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 24px;
+    align-items: center;
+    padding-block: 15px;
+    border-bottom: 1px solid var(--line);
+  }
+  .cstack__row dd {
+    font-size: 15px;
+  }
+
+  /* Siguiente proyecto: siempre en contraste con el fondo */
+  .cnext {
+    display: block;
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .cnext__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding-block: 96px;
+  }
+  .cnext__text {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .cnext__label {
+    color: color-mix(in srgb, var(--paper) 62%, var(--ink));
+  }
+  .cnext__name {
+    font-size: clamp(56px, 8.34vw, 120px);
+    line-height: 1;
+    letter-spacing: -0.017em;
+  }
+  :global(.cnext__arrow) {
+    flex-shrink: 0;
+    transition: transform 300ms var(--ease);
+  }
+  .cnext:hover :global(.cnext__arrow) {
+    transform: translateX(10px);
+  }
+
+  @media (max-width: 1180px) {
+    .chead__row {
+      grid-template-columns: 1fr 460px;
+      gap: 40px;
+    }
+    .csplit {
+      grid-template-columns: 260px 1fr;
+    }
+    .decision {
+      grid-template-columns: 140px 1fr 320px;
+      gap: 32px;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .chead__inner {
+      padding-block: 40px 48px;
+    }
+    .chead__title {
+      margin-top: 24px;
+    }
+    .chead__top {
+      flex-direction: column-reverse;
+      align-items: flex-start;
+      gap: 20px;
+    }
+    .chead__logo {
+      height: 52px;
+      padding: 10px 14px;
+    }
+    .chead__row {
+      grid-template-columns: 1fr;
+      gap: 32px;
+      margin-top: 20px;
+    }
+    .chead__desc {
+      font-size: 18px;
+    }
+    .chead__left {
+      gap: 20px;
+    }
+    .cvisual__inner {
+      padding-block: 40px;
+    }
+    :global(.cvisual__browser) {
+      height: auto;
+    }
+    :global(.cvisual__phone) {
+      display: none;
+    }
+    .csplit {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    .cproblem {
+      padding-block: 64px 0;
+    }
+    .cproblem__text {
+      gap: 20px;
+    }
+    .cproblem__desc {
+      font-size: 17px;
+    }
+    .cbuilt {
+      gap: 36px;
+      padding-block: 64px;
+    }
+    .cbuilt__grid {
+      grid-template-columns: 1fr;
+      gap: 44px;
+    }
+    .cextra {
+      gap: 32px;
+      padding-block: 64px;
+    }
+    .cextra__intro {
+      grid-template-columns: 1fr;
+      gap: 28px;
+    }
+    .cextra__desc {
+      font-size: 17px;
+    }
+    .cdec {
+      gap: 28px;
+      padding-block: 64px;
+    }
+    .decision {
+      grid-template-columns: 1fr;
+      gap: 14px;
+      padding-block: 28px;
+    }
+    .cseo {
+      padding-block: 64px;
+    }
+    .cseo__head {
+      gap: 14px;
+    }
+    .cseo__cols {
+      grid-template-columns: 1fr;
+      gap: 28px;
+    }
+    .cstack {
+      padding-block: 64px;
+    }
+    .cstack__row {
+      grid-template-columns: 120px 1fr;
+      gap: 12px;
+      padding-block: 13px;
+    }
+    .cstack__row dt {
+      font-size: 11px;
+    }
+    .cstack__row dd {
+      font-size: 14px;
+    }
+    .cnext__inner {
+      padding-block: 56px;
+    }
+    .cnext__text {
+      gap: 12px;
+    }
+    :global(.cnext__arrow) {
+      width: 36px;
+      height: 36px;
+    }
+  }
+</style>

@@ -1,0 +1,31 @@
+---
+// Enlace de texto con subrayado accent. Sin `href` se muestra igual
+// pero sin destino (para los enlaces aún pendientes).
+interface Props {
+  href?: string | null;
+  arrow?: '↗' | '→' | '↓' | '';
+  external?: boolean;
+  download?: boolean;
+  class?: string;
+}
+const { href, arrow = '', external = arrow === '↗', download, class: cls } = Astro.props;
+---
+
+{
+  href ? (
+    <a
+      class:list={['tlink', cls]}
+      href={href}
+      download={download}
+      {...(external ? { target: '_blank', rel: 'noopener' } : {})}
+    >
+      <slot />
+      {arrow && <span aria-hidden="true">{arrow}</span>}
+    </a>
+  ) : (
+    <span class:list={['tlink', cls]} aria-disabled="true">
+      <slot />
+      {arrow && <span aria-hidden="true">{arrow}</span>}
+    </span>
+  )
+}

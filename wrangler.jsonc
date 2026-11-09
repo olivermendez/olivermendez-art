@@ -1,0 +1,14 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "olivermendez-art",
+  "account_id": "6a344ee66116e7a84075905556d7c69f",
+  "compatibility_date": "2026-10-20",
+  "assets": {
+    "directory": "./dist",
+    "html_handling": "auto-trailing-slash"
+  },
+  "routes": [
+    { "pattern": "olivermendez.art", "custom_domain": true },
+    { "pattern": "www.olivermendez.art", "custom_domain": true }
+  ]
+}

@@ -1,0 +1,152 @@
+---
+import { t, type Lang } from '../i18n';
+import { tools, toolGroups, technologyGroups } from '../data/tools';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const T = t(lang).tools;
+const sections = [
+  { id: 'development', groups: technologyGroups },
+  { id: 'workflow', groups: toolGroups },
+] as const;
+---
+
+<section class="band band--line tools" id="herramientas" aria-labelledby="tools-title">
+  <div class="wrap tools__inner">
+    <header class="tools__head" data-reveal>
+      <p class="eyebrow eyebrow--accent">{T.eyebrow}</p>
+      <h2 class="h2" id="tools-title">{T.title}</h2>
+      <p class="tools__intro muted">{T.sub}</p>
+    </header>
+
+    <div class="tools__sections">
+      {sections.map((section) => (
+        <div class="tools__section">
+          <h3 class="eyebrow tools__section-title" data-reveal>{T.sections[section.id]}</h3>
+          <dl class="tools__list">
+            {section.groups.map((group) => (
+              <div class="tools__row" data-reveal>
+                <dt class="tools__category">{T.categories[group.id]}</dt>
+                <dd>
+                  <ul class="tools__items">
+                    {group.tools.map((id) => {
+                      const tool = tools[id];
+                      return (
+                        <li>
+                          <a
+                            class="tool"
+                            href={tool.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={`${tool.name} — ${T.visit}`}
+                            style={`--tool-bg:${tool.background};--tool-ink:${tool.foreground};--tool-icon-bg:${tool.iconBackground}`}
+                          >
+                            <span class="tool__icon" aria-hidden="true">
+                              <img src={`/logos/tools/${tool.logo}`} alt="" width="24" height="24" loading="lazy" decoding="async" />
+                            </span>
+                            <span class="tool__name">{tool.name}</span>
+                          </a>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .tools__inner {
+    display: grid;
+    grid-template-columns: minmax(220px, 0.8fr) minmax(0, 2fr);
+    align-items: start;
+    gap: clamp(40px, 5vw, 72px);
+    padding-block: 96px;
+  }
+  .tools__head {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  .tools__sections { min-width: 0; display: flex; flex-direction: column; gap: 48px; }
+  .tools__section-title {
+    font-weight: 400;
+    font-size: 11px;
+    padding-bottom: 20px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--line);
+  }
+  .tools__intro { line-height: 1.65; max-width: 32ch; }
+  .tools__list { min-width: 0; }
+  .tools__row {
+    display: grid;
+    grid-template-columns: 132px minmax(0, 1fr);
+    align-items: baseline;
+    gap: 24px;
+    padding-block: 14px;
+  }
+  .tools__row:first-child { padding-top: 0; }
+  .tools__row:last-child { padding-bottom: 0; }
+  .tools__category {
+    font-family: var(--font-mono);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  .tools__items { display: flex; flex-wrap: wrap; gap: 12px 20px; }
+  .tool {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    vertical-align: middle;
+  }
+  .tool__icon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    background: var(--tool-icon-bg);
+    box-shadow: inset 0 0 0 1px rgb(128 128 128 / 22%);
+  }
+  .tool__icon img { width: 24px; height: 24px; object-fit: contain; }
+  .tool__name {
+    display: block;
+    padding: 3px 9px 4px;
+    background: var(--tool-bg);
+    color: var(--tool-ink);
+    font-family: var(--font-mono);
+    font-size: clamp(18px, 1.65vw, 24px);
+    line-height: 1.3;
+    white-space: nowrap;
+    box-shadow: inset 0 0 0 1px rgb(128 128 128 / 22%);
+    transition: transform 180ms var(--ease);
+  }
+  .tool:hover .tool__name { transform: translateY(-2px); }
+  @media (min-width: 1101px) {
+    .tools__head { position: sticky; top: 122px; }
+  }
+  @media (max-width: 1100px) {
+    .tools__inner { grid-template-columns: 1fr; gap: 40px; padding-block: 72px; }
+    .tools__head { max-width: 600px; }
+    .tools__intro { max-width: none; }
+    .tool__name { font-size: 22px; }
+  }
+  @media (max-width: 600px) {
+    .tools__inner { padding-block: 56px; gap: 32px; }
+    .tools__head { gap: 16px; }
+    .tools__row { grid-template-columns: 1fr; gap: 10px; padding-block: 16px; }
+    .tools__category { font-size: 13px; color: var(--ink-muted); }
+    .tools__items { gap: 12px 16px; }
+    .tool { gap: 8px; }
+    .tool__icon { width: 32px; height: 32px; border-radius: 8px; }
+    .tool__icon img { width: 22px; height: 22px; }
+    .tool__name { font-size: 18px; padding: 4px 8px; }
+  }
+</style>

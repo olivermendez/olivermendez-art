@@ -1,0 +1,19 @@
+---
+import Base from '../../../layouts/Base.astro';
+import CaseStudy from '../../../components/CaseStudy.astro';
+import { t, casePaths } from '../../../i18n';
+import { projects, caseIds } from '../../../data/projects';
+import type { CaseId } from '../../../i18n/cases.es';
+
+export function getStaticPaths() {
+  return caseIds.map((id) => ({ params: { slug: projects[id].slug }, props: { id } }));
+}
+
+const { id } = Astro.props as { id: CaseId };
+const T = t('en');
+const c = T.cases[id];
+---
+
+<Base lang="en" paths={casePaths(id)} title={`${c.name} — ${T.meta.caseSuffix}`} description={c.metaDesc}>
+  <CaseStudy lang="en" id={id} />
+</Base>

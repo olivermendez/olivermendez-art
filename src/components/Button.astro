@@ -1,0 +1,31 @@
+---
+interface Props {
+  href?: string | null;
+  variant?: 'primary' | 'secondary';
+  arrow?: '↗' | '→' | '↓' | '';
+  download?: boolean;
+  external?: boolean;
+  class?: string;
+}
+const { href, variant = 'primary', arrow = '', download, external, class: cls } = Astro.props;
+const classes = ['btn', `btn--${variant}`, cls];
+---
+
+{
+  href ? (
+    <a
+      class:list={classes}
+      href={href}
+      download={download}
+      {...(external ? { target: '_blank', rel: 'noopener' } : {})}
+    >
+      <slot />
+      {arrow && <span aria-hidden="true">{arrow}</span>}
+    </a>
+  ) : (
+    <button type="button" class:list={classes} aria-disabled="true">
+      <slot />
+      {arrow && <span aria-hidden="true">{arrow}</span>}
+    </button>
+  )
+}

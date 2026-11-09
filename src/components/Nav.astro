@@ -1,0 +1,239 @@
+---
+import { t, homePaths, otherLang, type Lang, type Paths } from '../i18n';
+import { links } from '../data/links';
+import Icon from './Icon.astro';
+
+interface Props {
+  lang: Lang;
+  paths: Paths;
+}
+const { lang, paths } = Astro.props;
+const T = t(lang).nav;
+const home = homePaths[lang];
+const alt = otherLang(lang);
+const cv = links.cv[lang];
+
+const items = [
+  { label: T.projects, href: `${home}#proyectos` },
+  { label: T.experience, href: `${home}#experiencia` },
+  { label: T.about, href: `${home}#sobre-mi` },
+  { label: T.tools, href: `${home}#herramientas` },
+  { label: T.contact, href: `${home}#contacto` },
+];
+---
+
+<header class="nav">
+  <div class="wrap nav__inner">
+    <a class="nav__name" href={home}>
+      <img src="/logo-64.png" alt="" width="22" height="21" />
+      Oliver Méndez
+    </a>
+
+    <nav class="nav__links" aria-label={lang === 'es' ? 'Principal' : 'Main'}>
+      {items.map((i) => <a href={i.href}>{i.label}</a>)}
+      <a class="nav__cv" href={cv ?? `${home}#contacto`} download={cv ? true : undefined}>
+        {T.cv} <span aria-hidden="true">↓</span>
+      </a>
+    </nav>
+
+    <div class="nav__tools">
+      <a
+        class="nav__lang"
+        href={paths[alt]}
+        hreflang={alt}
+        lang={alt}
+        data-set-lang={alt}
+        aria-label={T.switchLangLabel}
+        title={T.switchLangLabel}>{T.switchLang}</a
+      >
+      <button class="nav__round nav__theme" type="button" data-theme-toggle aria-label={T.theme} title={T.theme}>
+        <Icon name="moon" class="i-moon" />
+        <Icon name="sun" class="i-sun" />
+      </button>
+      <button
+        class="nav__round nav__menu"
+        type="button"
+        data-menu-toggle
+        aria-expanded="false"
+        aria-controls="menu-movil"
+        aria-label={T.menu}
+        data-label-open={T.menu}
+        data-label-close={T.close}
+      >
+        <Icon name="menu" size={18} class="i-menu" />
+        <Icon name="x" size={18} class="i-x" />
+      </button>
+    </div>
+  </div>
+
+  <div class="mmenu" id="menu-movil" hidden>
+    <nav class="wrap mmenu__inner" aria-label={lang === 'es' ? 'Menú' : 'Menu'}>
+      {items.map((i) => <a href={i.href}>{i.label}</a>)}
+      <a href={cv ?? `${home}#contacto`} download={cv ? true : undefined}>{T.cv} <span aria-hidden="true">↓</span></a>
+      <button class="mmenu__theme" type="button" data-theme-toggle>
+        <span class="nav__round" aria-hidden="true">
+          <Icon name="moon" class="i-moon" />
+          <Icon name="sun" class="i-sun" />
+        </span>
+        {T.theme}
+      </button>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: color-mix(in srgb, var(--paper) 92%, transparent);
+    backdrop-filter: saturate(1.4) blur(12px);
+    -webkit-backdrop-filter: saturate(1.4) blur(12px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 82px;
+  }
+  .nav__name {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    font-weight: 500;
+  }
+  .nav__links {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    margin-left: auto;
+    margin-right: 32px;
+    font-size: 15px;
+  }
+  .nav__links a {
+    position: relative;
+  }
+  .nav__links a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -4px;
+    height: 1px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 200ms var(--ease);
+  }
+  .nav__links a:hover::after {
+    transform: scaleX(1);
+  }
+  .nav__cv {
+    font-weight: 500;
+  }
+  .nav__tools {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .nav__lang {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    color: var(--ink-muted);
+    transition: color 200ms ease;
+  }
+  .nav__lang:hover {
+    color: var(--ink);
+  }
+  .nav__round {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    transition:
+      transform 120ms var(--ease),
+      border-color 200ms ease;
+  }
+  .nav__round:hover {
+    border-color: var(--ink-muted);
+  }
+  .nav__round:active {
+    transform: scale(0.97);
+  }
+  .nav__round > :global(svg) {
+    grid-area: 1 / 1;
+  }
+  :global(.i-sun),
+  :global(.i-x) {
+    display: none;
+  }
+  :global(:root[data-theme='dark'] .i-sun) {
+    display: block;
+  }
+  :global(:root[data-theme='dark'] .i-moon) {
+    display: none;
+  }
+  .nav__menu {
+    display: none;
+    width: 38px;
+    height: 38px;
+  }
+  .nav__menu[aria-expanded='true'] :global(.i-x) {
+    display: block;
+  }
+  .nav__menu[aria-expanded='true'] :global(.i-menu) {
+    display: none;
+  }
+
+  .mmenu {
+    border-top: 1px solid var(--line);
+    background: var(--paper);
+  }
+  .mmenu__inner {
+    display: flex;
+    flex-direction: column;
+    padding-block: 12px 24px;
+  }
+  .mmenu__inner a {
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+    font-family: var(--font-display);
+    font-size: 30px;
+    line-height: 1.1;
+  }
+
+  .mmenu__theme {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 20px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+
+  @media (max-width: 1100px) {
+    .nav__inner {
+      height: 74px;
+    }
+    .nav__links,
+    .nav__theme {
+      display: none;
+    }
+    .nav__menu {
+      display: grid;
+    }
+  }
+  @media (min-width: 1101px) {
+    .mmenu {
+      display: none !important;
+    }
+  }
+</style>

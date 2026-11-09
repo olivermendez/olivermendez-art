@@ -1,0 +1,18 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<'div'> {
+  url: string;
+}
+const { url, class: cls, ...rest } = Astro.props;
+---
+
+<div class:list={['browser', cls]} {...rest}>
+  <div class="browser__bar" aria-hidden="true">
+    <span class="browser__dots"><i></i><i></i><i></i></span>
+    <span class="browser__url">{url}</span>
+  </div>
+  <div class="browser__screen">
+    <slot />
+  </div>
+</div>

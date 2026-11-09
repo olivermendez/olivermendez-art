@@ -1,0 +1,178 @@
+---
+import '../styles/global.css';
+import { t, type Lang, type Paths } from '../i18n';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  lang: Lang;
+  paths: Paths; // la misma página en cada idioma
+  title: string;
+  description: string;
+}
+const { lang, paths, title, description } = Astro.props;
+const T = t(lang);
+const site = Astro.site ?? new URL('https://olivermendez.art');
+const url = (p: string) => new URL(p, site).href;
+const alternates = { es: url(paths.es), en: url(paths.en) };
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={alternates[lang]} />
+    <link rel="alternate" hreflang="es" href={alternates.es} />
+    <link rel="alternate" hreflang="en" href={alternates.en} />
+    <link rel="alternate" hreflang="x-default" href={alternates.es} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={alternates[lang]} />
+    <meta property="og:locale" content={T.locale.replace('-', '_')} />
+    <meta name="theme-color" content="#f5f3ee" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#111110" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" href="/favicon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <!--
+      Idioma: si el visitante no ha elegido idioma antes, se usa el del navegador.
+      Navegador en inglés (u otro idioma que no sea español) → versión en inglés.
+      Los buscadores no se redirigen; encuentran cada versión por hreflang.
+    -->
+    <script is:inline define:vars={{ current: lang, targets: paths }}>
+      (function () {
+        try {
+          if (/bot|crawl|spider|slurp|lighthouse|headless|preview/i.test(navigator.userAgent)) return;
+          var want = null;
+          try { want = localStorage.getItem('lang'); } catch (e) {}
+          if (want !== 'es' && want !== 'en') {
+            var list = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || ''];
+            want = 'en';
+            for (var i = 0; i < list.length; i++) {
+              var code = String(list[i] || '').toLowerCase().slice(0, 2);
+              if (code === 'es' || code === 'en') { want = code; break; }
+            }
+          }
+          if (want !== current) location.replace(targets[want] + location.search + location.hash);
+        } catch (e) {}
+      })();
+    </script>
+
+    <!-- Tema: preferencia guardada o la del sistema, antes de pintar. -->
+    <script is:inline>
+      (function () {
+        var d = document.documentElement;
+        d.classList.add('js');
+        try {
+          var s = localStorage.getItem('theme');
+          if (s === 'light' || s === 'dark') d.dataset.theme = s;
+          else if (matchMedia('(prefers-color-scheme: dark)').matches) d.dataset.theme = 'dark';
+        } catch (e) {}
+      })();
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400&family=Instrument+Serif:ital@0;1&display=swap"
+      rel="stylesheet"
+    />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'Person',
+        name: 'Oliver Méndez',
+        alternateName: 'Oliver Yunior Méndez Arias',
+        url: site.href,
+        image: url('/img/oliver-mendez.jpg'),
+        jobTitle: 'Project Lead Director',
+        worksFor: { '@type': 'Organization', name: 'Simlimites' },
+        address: { '@type': 'PostalAddress', addressLocality: 'Santo Domingo', addressCountry: 'DO' },
+        knowsAbout: ['Flutter', 'Next.js', 'TypeScript', 'Supabase', 'Model Context Protocol', 'AI agents', 'e-CF'],
+        sameAs: ['https://www.linkedin.com/in/olivermendeza'],
+      })}
+    />
+  </head>
+  <body>
+    <a class="skip" href="#contenido">{T.nav.skip}</a>
+    <Nav lang={lang} paths={paths} />
+    <main id="contenido">
+      <slot />
+    </main>
+    <Footer lang={lang} />
+
+    <script>
+      const root = document.documentElement;
+
+      // Cambio de tema
+      document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]').forEach((btn) =>
+        btn.addEventListener('click', () => {
+          const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+          root.dataset.theme = next;
+          try {
+            localStorage.setItem('theme', next);
+          } catch {}
+        }),
+      );
+
+      // Selector de idioma: recuerda la elección para no volver a redirigir
+      document.querySelectorAll<HTMLAnchorElement>('[data-set-lang]').forEach((a) =>
+        a.addEventListener('click', () => {
+          try {
+            localStorage.setItem('lang', a.dataset.setLang!);
+          } catch {}
+        }),
+      );
+
+      // Menú móvil
+      const menuBtn = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+      const menu = document.getElementById('menu-movil');
+      if (menuBtn && menu) {
+        const setOpen = (open: boolean) => {
+          menu.hidden = !open;
+          menuBtn.setAttribute('aria-expanded', String(open));
+          menuBtn.setAttribute('aria-label', (open ? menuBtn.dataset.labelClose : menuBtn.dataset.labelOpen) ?? '');
+        };
+        menuBtn.addEventListener('click', () => setOpen(menu.hidden));
+        menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+        document.addEventListener('keydown', (e) => e.key === 'Escape' && setOpen(false));
+      }
+
+      // Entrada de secciones: fade + 12px, escalonado 60ms
+      const items = document.querySelectorAll<HTMLElement>('[data-reveal]');
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver(
+          (entries) =>
+            entries.forEach((e) => {
+              if (e.isIntersecting) {
+                e.target.classList.add('is-in');
+                io.unobserve(e.target);
+              }
+            }),
+          { rootMargin: '0px 0px -8% 0px', threshold: 0.08 },
+        );
+        items.forEach((el) => io.observe(el));
+      } else {
+        items.forEach((el) => el.classList.add('is-in'));
+      }
+
+      // Hora de Santo Domingo en el footer
+      const clocks = document.querySelectorAll<HTMLTimeElement>('[data-sdq-clock]');
+      const fmt = new Intl.DateTimeFormat('es-DO', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false,
+        timeZone: 'America/Santo_Domingo',
+      });
+      const tick = () => clocks.forEach((c) => (c.textContent = fmt.format(new Date())));
+      tick();
+      setInterval(tick, 30_000);
+    </script>
+  </body>
+</html>

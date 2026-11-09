@@ -1,65 +1,42 @@
-# Oliver Mendez — Portfolio
+# Oliver Méndez — Portafolio
 
-Portafolio personal bilingüe (🇪🇸 español principal · 🇬🇧 inglés) de Oliver Mendez,
-Ingeniero de Software y Estratega de Producto. Desplegado en Cloudflare Pages en
-[olivermendez.art](https://olivermendez.art).
-
-## Stack
-
-- **React 19** + **TypeScript** + **Vite**
-- **Tailwind CSS v3**
-- **GSAP + ScrollTrigger** (animaciones)
-- **react-router-dom** (rutas por idioma: `/` español, `/en` inglés)
+Portafolio bilingüe en español e inglés, publicado en [olivermendez.art](https://olivermendez.art).
 
 ## Desarrollo
 
-```bash
-cd app
-npm install
-npm run dev       # servidor local
-npm run build     # build de producción (genera sitemap y compila)
-npm run preview   # sirve el build
-npm run lint      # oxlint
+```sh
+npm ci
+npm run dev
+npm run build
+npm run preview
 ```
 
-## Estructura
+El proyecto usa Astro y genera páginas estáticas. El español vive en `/` y el inglés en `/en/`.
+Incluye temas claro y oscuro, casos de estudio y una sección de tecnologías y herramientas con logos locales.
 
+## Contenido
+
+- `src/components/HomePage.astro`: portada y proyectos destacados.
+- `src/components/Tools.astro`: sección de tecnologías y herramientas.
+- `src/data/projects.ts`: imágenes, destinos y orden de navegación entre casos.
+- `src/data/tools.ts`: tecnologías y herramientas agrupadas por uso.
+- `src/data/links.ts`: CV, perfiles y vías de contacto.
+- `src/i18n/`: textos generales y casos de estudio en ambos idiomas.
+- `public/`: capturas de proyectos, logos y otros recursos estáticos.
+
+Los proyectos destacados aparecen en este orden: AutoListo, MesaPOS, Scanova y Premium Diagnósticos.
+Los datos pendientes se mantienen explícitos; no se generan destinos de contacto ficticios.
+
+## Producción
+
+El sitio se sirve mediante Cloudflare Workers Static Assets. `wrangler.jsonc` define el Worker
+`olivermendez-art` y los dominios `olivermendez.art` y `www.olivermendez.art`.
+
+```sh
+npm run deploy
 ```
-app/src/
-├── data/         # 📝 CONTENIDO (fuente única de verdad, bilingüe)
-│   ├── projects.ts      · proyectos del portafolio
-│   ├── experience.ts    · experiencia / case studies
-│   ├── services.ts, skills.ts, education.ts
-│   └── siteConfig.ts    · datos personales, redes, SEO
-├── i18n/         # sistema de idiomas (ES principal + EN)
-├── sections/     # secciones de la home (solo presentación)
-├── components/   # componentes reutilizables
-├── pages/        # página de detalle de proyecto
-└── lib/, hooks/  # utilidades (gsap, seo, scroll)
-```
 
-## Cómo actualizar el contenido
+Este comando compila el sitio y despliega `dist/` usando la sesión autenticada de Wrangler.
+Las credenciales no se guardan en el repositorio. `public/.assetsignore` excluye los metadatos de Finder.
 
-Todo el contenido vive en `app/src/data/` como archivos `.ts` tipados. Cada texto
-es bilingüe: `{ es: '...', en: '...' }`.
-
-**Añadir un proyecto:** edita `app/src/data/projects.ts`, copia un bloque, cambia
-el `id` (único, en minúsculas y con guiones) y traduce sus textos. Aparecerá
-automáticamente en la home, el hero (si `featured: true`) y en su página
-`/project/<id>` (y `/en/project/<id>`). El `sitemap.xml` se regenera en cada build.
-
-## SEO
-
-- Meta tags + Open Graph + Twitter Card por página e idioma
-- `hreflang` (es / en / x-default) y `canonical`
-- Datos estructurados JSON-LD (`Person`)
-- `sitemap.xml` (auto-generado) y `robots.txt`
-
-## Despliegue
-
-Cloudflare Pages (subida directa del build):
-
-```bash
-cd app && npm run build
-npx wrangler pages deploy dist --project-name=portfolio
-```
+La implementación actual en Astro reemplaza a la versión anterior en React, conservada en el historial de Git.

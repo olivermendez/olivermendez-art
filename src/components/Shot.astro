@@ -1,0 +1,23 @@
+---
+// Captura real dentro de un marco (navegador o iPhone).
+interface Props {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  eager?: boolean;
+}
+const { src, alt, width, height, eager = false } = Astro.props;
+---
+
+<div class="shot">
+  <img
+    src={src}
+    alt={alt}
+    width={width}
+    height={height}
+    loading={eager ? 'eager' : 'lazy'}
+    decoding="async"
+    fetchpriority={eager ? 'high' : undefined}
+  />
+</div>

@@ -1,18 +1,20 @@
-# Dependencies
 node_modules/
-
-# Build output
 dist/
 dist-ssr/
-
-# Logs
+.astro/
+.DS_Store
 *.log
 npm-debug.log*
-
-# OS / editor
-.DS_Store
 *.local
-
-# Claude Code (personal config y andamiaje del generador)
+.env*
+.dev.vars*
 .claude/
 workbench/
+
+.wrangler/
+
+scripts/capturas/out/
+scripts/capturas/pos-perfil/
+scripts/capturas/*clave*
+scripts/capturas/node_modules/
+docs/previews/
